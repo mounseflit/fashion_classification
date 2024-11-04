@@ -18,5 +18,5 @@ This is a simple web application built with Streamlit and TensorFlow that classi
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/yourusername/fashion-mnist-classifier.git
-   cd fashion-mnist-classifier
+   git clone https://github.com/mounseflit/fashion_classification.git
+   cd fashion_classification
