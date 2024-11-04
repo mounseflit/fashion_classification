@@ -1,4 +1,3 @@
-
 import streamlit as st
 import tensorflow as tf
 from PIL import Image, ImageOps
@@ -20,6 +19,7 @@ def preprocess_image(image):
     image = image.resize((28, 28))
     image = np.array(image) / 255.0  # Normalize the image
     image = np.expand_dims(image, axis=0)  # Add batch dimension
+    image = np.expand_dims(image, axis=-1)  # Add channel dimension for grayscale
     return image
 
 # Streamlit app interface
