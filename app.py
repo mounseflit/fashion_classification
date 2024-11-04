@@ -25,13 +25,16 @@ class_names = [
 def preprocess_image(image):
     # Convert the image to grayscale
     image = ImageOps.grayscale(image)
+
+    image = ImageOps.invert(image)
+
+    # Apply a threshold to create a binary image (white background and black foreground)
+    # threshold = 128
+    # image = image.point(lambda p: 255 if p > threshold else 0)
     
     # Resize to 28x28
     image = image.resize((28, 28))
-    
-    # Apply a threshold to create a binary image (white background and black foreground)
-    threshold = 128
-    image = image.point(lambda p: 255 if p > threshold else 0)
+        
 
     # Normalize the image and expand dimensions
     image = np.array(image) / 255.0  # Normalize the image
