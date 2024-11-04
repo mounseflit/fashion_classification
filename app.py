@@ -24,7 +24,8 @@ class_names = [
 # Function to preprocess the image
 def preprocess_image(image):
     # Convert the image to grayscale and resize to 28x28
-    image = ImageOps.grayscale(image)
+    threshold = 128
+    image = image.point(lambda p: 255 if p > threshold else 0)  
     image = image.resize((28, 28))
     image = np.array(image) / 255.0  # Normalize the image
     image = np.expand_dims(image, axis=(0, -1))  # Add batch and channel dimensions
