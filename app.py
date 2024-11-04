@@ -26,21 +26,33 @@ def preprocess_image(image):
     # Convert the image to grayscale
     image = ImageOps.grayscale(image)
 
-     # Resize to 28x28
+    # Resize to 28x28
     image = image.resize((28, 28))
     
-    # Apply a binary threshold for black background and white foreground
-    threshold = 128  # Adjust the threshold if necessary
-    image = image.point(lambda p: 0 if p < threshold else 255)  # Set background to black, foreground to white
+    # Convert to NumPy array
+    image_array = np.array(image)
 
-    # Convert to NumPy array and normalize to [0, 1]
-    image = np.array(image) / 255.0
+    # Determine the background color by checking the corners of the image
+    corner_pixels = [
+        image_array[0, 0],  # Top-left corner
+        image_array[0, -1],  # Top-right corner
+        image_array[-1, 0],  # Bottom-left corner
+        image_array[-1, -1]  # Bottom-right corner
+    ]
+    background_color = np.mean(corner_pixels)  # Calculate average corner pixel brightness
+
+    # If the background is light, invert the image to make the background dark
+    if background_color > 128:  # Light background (white or light gray)
+        image_array = 255 - image_array  # Invert colors
+
+    # Normalize the image to [0, 1] for model compatibility
+    image_array = image_array / 255.0
+
+    # Expand dimensions to add batch and channel dimensions
+    image_array = np.expand_dims(image_array, axis=(0, -1))
     
+    return image_array
 
-    # Normalize the image and expand dimensions
-    image = np.array(image) / 255.0  # Normalize the image
-    image = np.expand_dims(image, axis=(0, -1))  # Add batch and channel dimensions
-    return image
 
 # Streamlit app interface
 st.title("Fashion MNIST Clothing Classifier")
